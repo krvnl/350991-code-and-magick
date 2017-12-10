@@ -47,17 +47,17 @@
     similarListElement.appendChild(fragmentElement);
   };
 
-  var userDialog = document.querySelector('.setup');
-  var userDialogOpen = document.querySelector('.setup-open');
-  var userDialogClose = userDialog.querySelector('.setup-close');
-  var userDialogSave = userDialog.querySelector('.setup-submit');
-  var userDialogNameInput = userDialog.querySelector('.setup-user-name');
+  var userDialogElement = document.querySelector('.setup');
+  var userDialogOpenElement = document.querySelector('.setup-open');
+  var userDialogCloseElement = userDialogElement.querySelector('.setup-close');
+  var userDialogSaveElement = userDialogElement.querySelector('.setup-submit');
+  var userDialogNameInputElement = userDialogElement.querySelector('.setup-user-name');
 
-  var similarListElement = userDialog.querySelector('.setup-similar-list');
+  var similarListElement = userDialogElement.querySelector('.setup-similar-list');
   var similarWizardTemplateElement = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
   var onUserDialogSaveClick = function () {
-    if (userDialogNameInput.valid) {
+    if (userDialogNameInputElement.valid) {
       document.querySelector('.setup-wizard-form').submit();
     }
   };
@@ -65,84 +65,97 @@
   var onUserDialogSavePress = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       onUserDialogSaveClick();
-    };
-  };
-
-  var onPopupEscPress = function (evt) {
-    if ((evt.keyCode === ESC_KEYCODE) || ((evt.keyCode === ENTER_KEYCODE) && (document.activeElement === userDialogClose))) {
-      closePopup();
-    };
-  };
-
-  var onUserDialogNameInputInvalid = function () {
-    if (userDialogNameInput.validity.tooShort) {
-      userDialogNameInput.setCustomValidity('Имя должно состоять минимум из 2 символов');
-    } else if (userDialogNameInput.validity.tooLong) {
-      userDialogNameInput.setCustomValidity('Имя не должно превышать 25 символов');
-    } else if (userDialogNameInput.validity.valueMissing) {
-      userDialogNameInput.setCustomValidity('Обязательное поле');
-    } else {
-      userDialogNameInput.setCustomValidity('');
     }
   };
 
-  var openPopup = function () {
-    userDialog.classList.remove('hidden');
+  var onPopupEscPress = function (evt) {
+    if ((evt.keyCode === ESC_KEYCODE) || ((evt.keyCode === ENTER_KEYCODE) && (document.activeElement === userDialogCloseElement))) {
+      closePopup();
+    }
+  };
 
-    var wizards = createWizards();
-    renderAllWizards(wizards);
+  var onUserDialogNameInputInvalid = function () {
+    if (userDialogNameInputElement.validity.tooShort) {
+      userDialogNameInputElement.setCustomValidity('Имя должно состоять минимум из 2 символов');
+    } else if (userDialogNameInputElement.validity.tooLong) {
+      userDialogNameInputElement.setCustomValidity('Имя не должно превышать 25 символов');
+    } else if (userDialogNameInputElement.validity.valueMissing) {
+      userDialogNameInputElement.setCustomValidity('Обязательное поле');
+    } else {
+      userDialogNameInputElement.setCustomValidity('');
+    }
+  };
+
+  var userDialogCoatElement = userDialogElement.querySelector('.setup-wizard .wizard-coat');
+  var userDialogEyesElement = userDialogElement.querySelector('.setup-wizard .wizard-eyes');
+  var userDialogFireballElement = userDialogElement.querySelector('.setup-fireball-wrap');
+
+  var onUserDialogCoatClick = function () {
+    userDialogCoatElement.setAttribute('style', 'fill: ' + COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)]);
+  };
+  var onUserDialogEyesClick = function () {
+    userDialogEyesElement.setAttribute('style', 'fill: ' + EYES_COLORS[Math.floor(Math.random() * EYES_COLORS.length)]);
+  };
+  var onUserDialogFireballClick = function () {
+    userDialogFireballElement.setAttribute('style', 'background-color: ' + FIREBALL_COLORS[Math.floor(Math.random() * FIREBALL_COLORS.length)]);
+  };
+
+  var wizards = createWizards();
+  renderAllWizards(wizards);
+
+  var openPopup = function () {
+    userDialogElement.classList.remove('hidden');
+
     document.querySelector('.setup-similar').classList.remove('hidden');
 
     document.addEventListener('keydown', onPopupEscPress);
-    userDialogSave.addEventListener('click', onUserDialogSaveClick);
-    userDialogSave.addEventListener('keydown', onUserDialogSavePress);
+    userDialogCloseElement.addEventListener('click', onUserDialogSaveClick);
+    userDialogSaveElement.addEventListener('keydown', onUserDialogSavePress);
 
-    userDialogNameInput.addEventListener('invalid', onUserDialogNameInputInvalid);
+    userDialogNameInputElement.addEventListener('invalid', onUserDialogNameInputInvalid);
 
     // Изменение цвета coat
-    var userDialogCoat = userDialog.querySelector('.setup-wizard .wizard-coat');
-    var onUserDialogCoatClick = function () {
-      userDialogCoat.setAttribute('style', 'fill: ' + COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)]);
-    };
-    userDialogCoat.addEventListener('click', onUserDialogCoatClick);
+    userDialogCoatElement = userDialogElement.querySelector('.setup-wizard .wizard-coat');
+    userDialogCoatElement.addEventListener('click', onUserDialogCoatClick);
 
     // Изменение цвета eyes
-    var userDialogEyes = userDialog.querySelector('.setup-wizard .wizard-eyes');
-    var onUserDialogEyesClick = function () {
-      userDialogEyes.setAttribute('style', 'fill: ' + EYES_COLORS[Math.floor(Math.random() * EYES_COLORS.length)]);
-    };
-    userDialogEyes.addEventListener('click', onUserDialogEyesClick);
+    userDialogEyesElement = userDialogElement.querySelector('.setup-wizard .wizard-eyes');
+    userDialogEyesElement.addEventListener('click', onUserDialogEyesClick);
 
     // Изменение цвета fireball
-    var userDialogFireball = userDialog.querySelector('.setup-fireball-wrap');
-    var onUserDialogFireballClick = function () {
-      userDialogFireball.setAttribute('style', 'background-color: ' + FIREBALL_COLORS[Math.floor(Math.random() * FIREBALL_COLORS.length)]);
-    };
-    userDialogFireball.addEventListener('click', onUserDialogFireballClick);
+    userDialogFireballElement = userDialogElement.querySelector('.setup-fireball-wrap');
+    userDialogFireballElement.addEventListener('click', onUserDialogFireballClick);
   };
 
   var closePopup = function () {
     if (!(document.activeElement.tagName === 'INPUT')) {
-      userDialog.classList.add('hidden');
+      userDialogElement.classList.add('hidden');
+      // Удаляем handlers из окна настройки персонажа при его закрытии
       document.removeEventListener('keydown', onPopupEscPress);
+      userDialogCloseElement.removeEventListener('click', onUserDialogSaveClick);
+      userDialogSaveElement.removeEventListener('keydown', onUserDialogSavePress);
+      userDialogNameInputElement.removeEventListener('invalid', onUserDialogNameInputInvalid);
+      userDialogCoatElement.removeEventListener('click', onUserDialogCoatClick);
+      userDialogEyesElement.removeEventListener('click', onUserDialogEyesClick);
+      userDialogFireballElement.removeEventListener('click', onUserDialogFireballClick);
     }
   };
 
-  userDialogOpen.addEventListener('click', function () {
+  userDialogOpenElement.addEventListener('click', function () {
     openPopup();
   });
 
-  userDialogOpen.addEventListener('keydown', function (evt) {
+  userDialogOpenElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       openPopup();
-    };
+    }
   });
 
-  userDialogClose.addEventListener('click', function () {
+  userDialogCloseElement.addEventListener('click', function () {
     closePopup();
   });
 
-  userDialogClose.addEventListener('keydown', function (evt) {
+  userDialogCloseElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       closePopup();
     }
